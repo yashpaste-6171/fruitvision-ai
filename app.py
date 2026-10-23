@@ -61,7 +61,44 @@ div.stButton > button {
 div.stButton > button:hover {
     background: #15803d;
     color: white;
+/* Fix text contrast */
+.stApp,
+.stApp p,
+.stApp label,
+.stApp h1,
+.stApp h2,
+.stApp h3,
+.stApp li {
+    color: #1f2937;
 }
+
+.hero h1 {
+    color: #14532d !important;
+}
+
+.hero h3 {
+    color: #166534 !important;
+}
+
+.hero p {
+    color: #456052 !important;
+}
+
+.panel h3,
+.panel p {
+    color: #1f2937 !important;
+}
+
+.stFileUploader label {
+    color: #1f2937 !important;
+}
+
+.stProgress label {
+    color: #1f2937 !important;
+}
+
+}
+
 </style>
 """, unsafe_allow_html=True)
 
