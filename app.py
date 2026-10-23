@@ -7,211 +7,365 @@ from PIL import Image
 
 st.set_page_config(
     page_title="FruitVision AI",
-    page_icon="🍓",
+    page_icon="🍃",
     layout="wide"
 )
 
+# ---------- Custom design ----------
 st.markdown("""
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 .stApp {
-    background: linear-gradient(135deg, #f0fff4, #fff9ed);
+    background: linear-gradient(135deg, #e9fff0, #e8f8f5, #fff8e8);
+    font-family: 'Inter', sans-serif;
+    color: #111827;
 }
 .block-container {
-    max-width: 1200px;
-    padding-top: 2rem;
+    max-width: 1450px;
+    padding-top: 1.2rem;
 }
-.hero {
-    padding: 28px;
-    border-radius: 24px;
-    background: linear-gradient(120deg, #dcfce7, #fff7ed);
-    border: 1px solid #d1fae5;
-    margin-bottom: 22px;
+h1, h2, h3, p, label {
+    color: #111827;
 }
-.hero h1 {
-    color: #14532d;
-    font-size: 3rem;
-    margin-bottom: 5px;
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    border-radius: 50px;
+    background: rgba(255,255,255,.9);
+    box-shadow: 0 5px 25px #14532d18;
+    margin-bottom: 25px;
 }
-.hero p {
-    color: #456052;
+.brand {
+    font-size: 1.7rem;
+    font-weight: 800;
+}
+.brand span {
+    color: #16a34a;
+}
+.navlinks {
+    font-size: .95rem;
+    font-weight: 600;
+    color: #334155;
+}
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 12px;
+}
+.hero-title span {
+    color: #16a34a;
+}
+.subtitle {
     font-size: 1.1rem;
+    color: #526579 !important;
+    line-height: 1.6;
+}
+.feature {
+    text-align: center;
+    padding: 17px 10px;
+    margin-top: 14px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.8);
+    border: 1px solid white;
+    box-shadow: 0 5px 15px #14532d0d;
+}
+.feature-icon {
+    font-size: 1.6rem;
+}
+.feature strong {
+    display: block;
+    margin: 5px 0;
+}
+.feature small {
+    color: #526579;
 }
 .panel {
-    background: rgba(255,255,255,0.85);
-    border: 1px solid #dceee2;
     padding: 22px;
-    border-radius: 20px;
-    box-shadow: 0 5px 20px rgba(30,80,50,0.06);
+    border-radius: 23px;
+    background: rgba(255,255,255,.88);
+    border: 1px solid white;
+    box-shadow: 0 7px 25px #14532d12;
 }
-.result {
-    background: #ecfdf3;
-    padding: 20px;
-    border-radius: 16px;
-    border-left: 5px solid #16a34a;
+.panel h3 {
+    margin-top: 0;
+}
+.muted {
+    color: #526579 !important;
+}
+.prediction {
+    background: linear-gradient(90deg, #ffe1e6, #fff0e8);
+    color: #be123c;
+    border: 1px solid #fecdd3;
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 8px 0 15px;
+}
+.confidence {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: #15803d;
+}
+.toprow {
+    display: grid;
+    grid-template-columns: 35px 1fr 75px;
+    gap: 8px;
+    align-items: center;
+    padding: 11px 5px;
+    border-bottom: 1px solid #e5eee7;
+}
+.rank {
+    background: #e2e8f0;
+    border-radius: 50%;
+    width: 29px;
+    height: 29px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
 }
 div.stButton > button {
-    background: #16a34a;
+    background: linear-gradient(90deg, #16a34a, #0d9747);
     color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
     border: none;
     border-radius: 12px;
-    padding: 0.7rem 1rem;
-    font-weight: 700;
+    padding: .75rem 1rem;
     width: 100%;
 }
 div.stButton > button:hover {
     background: #15803d;
     color: white;
-/* Fix text contrast */
-.stApp,
-.stApp p,
-.stApp label,
-.stApp h1,
-.stApp h2,
-.stApp h3,
-.stApp li {
-    color: #1f2937;
+    border: none;
 }
-
-.hero h1 {
-    color: #14532d !important;
+.stFileUploader {
+    background: #f5fff8;
+    border: 1.5px dashed #7bd9a0;
+    padding: 10px;
+    border-radius: 15px;
 }
-
-.hero h3 {
-    color: #166534 !important;
+.stFileUploader label,
+.stFileUploader p,
+.stFileUploader small {
+    color: #334155 !important;
 }
-
-.hero p {
-    color: #456052 !important;
+.footer {
+    margin-top: 22px;
+    padding: 22px 12px;
+    border-radius: 22px;
+    background: rgba(255,255,255,.88);
+    text-align: center;
+    color: #334155;
+    border: 1px solid white;
 }
-
-.panel h3,
-.panel p {
-    color: #1f2937 !important;
+@media (max-width: 750px) {
+    .navbar {
+        border-radius: 20px;
+        flex-direction: column;
+        gap: 8px;
+    }
 }
-
-.stFileUploader label {
-    color: #1f2937 !important;
-}
-
-.stProgress label {
-    color: #1f2937 !important;
-}
-
-}
-
 </style>
 """, unsafe_allow_html=True)
 
+
+# ---------- Model and labels ----------
 @st.cache_resource
 def load_model():
     return tf.keras.models.load_model(
         "fruit_classifier_final.keras"
     )
 
-with open("fruit_class_names.json", "r") as f:
+with open("fruit_class_names.json", "r", encoding="utf-8") as f:
     class_names = json.load(f)
 
+
+# ---------- Navigation ----------
 st.markdown("""
-<div class="hero">
-    <h1>🍃 FruitVision AI</h1>
-    <h3>Smart fruit recognition, powered by deep learning</h3>
-    <p>Upload a fruit photo and let AI identify its class.</p>
+<div class="navbar">
+  <div class="brand">🍃 FruitVision <span>AI</span></div>
+  <div class="navlinks">Home　 ·　 About　 ·　 How It Works　 ·　 Model</div>
 </div>
 """, unsafe_allow_html=True)
 
-a, b, c = st.columns(3)
 
-with a:
-    st.markdown(
-        '<div class="panel">⚡ <b>AI Powered</b><br>'
-        'EfficientNetB0 transfer learning</div>',
-        unsafe_allow_html=True
-    )
-with b:
-    st.markdown(
-        '<div class="panel">🍎 <b>33 Classes</b><br>'
-        'Recognize fruit categories in the model</div>',
-        unsafe_allow_html=True
-    )
-with c:
-    st.markdown(
-        '<div class="panel">📊 <b>Top Predictions</b><br>'
-        'View confidence scores for the leading classes</div>',
-        unsafe_allow_html=True
+# ---------- Hero section ----------
+hero_left, hero_right = st.columns([1, 1], gap="large")
+
+with hero_left:
+    st.markdown("""
+    <div class="hero-title">
+      FruitVision <span>AI</span>
+    </div>
+    <h2>AI-Powered Fruit Classification</h2>
+    <p class="subtitle">
+      Upload a fruit image and let our deep learning model
+      identify its class. Explore intelligent fruit recognition
+      with a simple, interactive experience.
+    </p>
+    """, unsafe_allow_html=True)
+
+    f1, f2, f3 = st.columns(3)
+    with f1:
+        st.markdown("""
+        <div class="feature">
+          <div class="feature-icon">⚡</div>
+          <strong>AI Powered</strong>
+          <small>EfficientNetB0</small>
+        </div>""", unsafe_allow_html=True)
+    with f2:
+        st.markdown("""
+        <div class="feature">
+          <div class="feature-icon">🍎</div>
+          <strong>33 Classes</strong>
+          <small>Fruit categories</small>
+        </div>""", unsafe_allow_html=True)
+    with f3:
+        st.markdown("""
+        <div class="feature">
+          <div class="feature-icon">✨</div>
+          <strong>Easy to Use</strong>
+          <small>Upload and predict</small>
+        </div>""", unsafe_allow_html=True)
+
+with hero_right:
+    st.image(
+        "https://images.unsplash.com/photo-1610832958506-aa56368176cf"
+        "?auto=format&fit=crop&w=1200&q=85",
+        use_container_width=True
     )
 
 st.write("")
 
-left, right = st.columns([1, 1.15], gap="large")
+
+# ---------- Upload panel ----------
+left, right = st.columns([.92, 1.08], gap="large")
 
 with left:
-    st.markdown(
-        '<div class="panel"><h3>📤 Upload a fruit</h3>'
-        '<p>Choose a JPG, JPEG, or PNG image.</p></div>',
-        unsafe_allow_html=True
-    )
+    st.markdown("""
+    <div class="panel">
+      <h3>☁️ Upload a Fruit Image</h3>
+      <p class="muted">Supports JPG, JPEG and PNG formats.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
     uploaded_file = st.file_uploader(
-        "Choose your image",
-        type=["jpg", "jpeg", "png"]
+        "Choose a fruit image",
+        type=["jpg", "jpeg", "png"],
+        label_visibility="collapsed"
     )
+
+    image = None
 
     if uploaded_file:
-        image = Image.open(uploaded_file).convert("RGB")
-        st.image(image, caption="Your uploaded fruit",
-                 use_container_width=True)
+        try:
+            image = Image.open(uploaded_file).convert("RGB")
+            st.image(
+                image,
+                caption="Your uploaded fruit",
+                use_container_width=True
+            )
+        except Exception:
+            st.error("Unable to open this image. Try another file.")
 
-with right:
-    st.markdown(
-        '<div class="panel"><h3>✨ Prediction results</h3>'
-        '<p>Your AI results will appear here.</p></div>',
-        unsafe_allow_html=True
+    classify_clicked = st.button(
+        "✨  Classify Fruit",
+        disabled=image is None
     )
 
-    if uploaded_file and st.button("🍓 Classify Fruit"):
-        with st.spinner("Analyzing your image..."):
-            model = load_model()
-            resized = image.resize((224, 224))
-            array = np.asarray(resized, dtype=np.float32)
-            array = np.expand_dims(array, axis=0)
 
-            predictions = model.predict(array, verbose=0)[0]
+# ---------- Prediction panel ----------
+with right:
+    st.markdown("""
+    <div class="panel">
+      <h3>📊 Prediction Result</h3>
+      <p class="muted">Your AI results appear here.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-        if len(predictions) != len(class_names):
-            st.error(
-                "The number of model outputs does not match "
-                "the class-name list. Please check the label mapping."
-            )
-        else:
-            top_indices = np.argsort(predictions)[::-1][:3]
-            best = int(top_indices[0])
-            confidence = float(predictions[best]) * 100
+    if classify_clicked and image is not None:
+        try:
+            with st.spinner("Analyzing your fruit..."):
+                model = load_model()
 
-            st.markdown(
-                f'<div class="result"><h2>🍏 '
-                f'{class_names[best]}</h2>'
-                f'<h3>{confidence:.2f}% confidence</h3>'
-                f'</div>',
-                unsafe_allow_html=True
-            )
+                resized = image.resize((224, 224))
+                array = np.asarray(resized, dtype=np.float32)
+                array = np.expand_dims(array, axis=0)
 
-            st.subheader("🏆 Top 3 predictions")
+                predictions = model.predict(array, verbose=0)[0]
 
-            for rank, idx in enumerate(top_indices, start=1):
-                score = float(predictions[idx]) * 100
-                st.write(
-                    f"**{rank}. {class_names[idx]}** — "
-                    f"{score:.2f}%"
+            if len(predictions) != len(class_names):
+                st.error(
+                    "The model output count does not match the class "
+                    "names. Please verify fruit_class_names.json."
                 )
-                st.progress(min(max(score / 100, 0.0), 1.0))
+            else:
+                top_indices = np.argsort(predictions)[::-1][:3]
+                best_idx = int(top_indices[0])
+                confidence = float(predictions[best_idx]) * 100
 
-st.divider()
+                st.markdown(
+                    '<p class="muted">Predicted Class</p>'
+                    f'<div class="prediction">🍓 '
+                    f'{class_names[best_idx]}</div>',
+                    unsafe_allow_html=True
+                )
 
-st.markdown(
-    "<div style='text-align:center;color:#64748b;'>"
-    "🍃 <b>FruitVision AI</b> · Computer Vision Midterm Project"
-    "<br>Built with Python, TensorFlow and Streamlit"
-    "</div>",
-    unsafe_allow_html=True
-)
+                st.markdown(
+                    '<p class="muted">Confidence</p>'
+                    f'<div class="confidence">{confidence:.2f}%</div>',
+                    unsafe_allow_html=True
+                )
 
+                st.progress(
+                    min(max(confidence / 100, 0.0), 1.0)
+                )
+
+                st.markdown("### 🏅 Top 3 Predictions")
+
+                for rank, idx in enumerate(top_indices, start=1):
+                    score = float(predictions[idx]) * 100
+                    label = class_names[int(idx)]
+
+                    st.markdown(
+                        f'<div class="toprow">'
+                        f'<div class="rank">{rank}</div>'
+                        f'<div><b>{label}</b></div>'
+                        f'<div style="text-align:right">{score:.2f}%</div>'
+                        f'</div>',
+                        unsafe_allow_html=True
+                    )
+                    st.progress(
+                        min(max(score / 100, 0.0), 1.0)
+                    )
+
+        except Exception as exc:
+            st.error("Prediction failed. Check the model and dependencies.")
+            st.exception(exc)
+
+    elif not uploaded_file:
+        st.info("Upload a fruit image on the left to get started.")
+    elif not classify_clicked:
+        st.info("Click **Classify Fruit** to see the prediction.")
+
+
+# ---------- Footer ----------
+st.markdown("""
+<div class="footer">
+  🧠 <b>Deep Learning</b>　 ·　
+  🗃️ <b>Fruit Dataset</b>　 ·　
+  🎯 <b>Model Evaluation</b>　 ·　
+  💻 <b>Streamlit Web App</b>
+  <br><br>
+  <span style="color:#64748b">
+    🍃 FruitVision AI · Computer Vision Midterm Project
+  </span>
+</div>
+""", unsafe_allow_html=True)
